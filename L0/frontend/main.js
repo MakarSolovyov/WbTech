@@ -8,7 +8,8 @@ function generateOrders() {
         .then(response => response.json())
         .then(response => {
             if (response.error) {
-                console.error('Ошибка:', error);
+                console.error('Ошибка:', response.message);
+                genOutput.value = response.message;
             }
             else {
                 console.log(`Сгенерировано 10 заказов`);
