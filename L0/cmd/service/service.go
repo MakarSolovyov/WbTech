@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"l0/internal/model"
 	kafka "l0/internal/pkg"
 	"log"
@@ -16,7 +15,7 @@ import (
 )
 
 func main() {
-	fmt.Println("Сервис запущен.")
+	log.Println("Сервис запущен.")
 
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
@@ -124,6 +123,6 @@ func getOrderByIdOperation(uid string) (interface{}, error) {
 
 func stopService(sigchan chan os.Signal, doneCh chan struct{}) {
 	<-sigchan
-	fmt.Println("Горячая клавиша выхода зафиксирована, сервис остановлен.")
+	log.Println("Горячая клавиша выхода зафиксирована, сервис остановлен.")
 	doneCh <- struct{}{}
 }

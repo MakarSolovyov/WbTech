@@ -16,6 +16,7 @@ import (
 
 func main() {
 
+	log.Println("Сервер запущен.")
 	var brokers []string = []string{"localhost:9092"}
 
 	worker, err := kafka.CreateConsumer(brokers)
