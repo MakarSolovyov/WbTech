@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>L0 Проект</title>
+</head>
+
+<body>
+    <script src="/static/main.js"></script>
+
+    <h1>Генерация информации о заказах</h1>
+    <p>Сгенерировать 10 заказов</p>
+    <button onclick="generateOrders()">Сгенерировать</button>
+    <input type="text" id="generateOrderMsg" readonly />
+
+    <h1>Получение информации о заказе</h1>
+    <input type="text" id="orderUid" />
+    <button onclick="getOrder()">Получить</button>
+    <div id="tables-container">
+        <h2>Заказ:</h2>
+        <table id="orderTable">
+            <thead>
+                <tr>
+                    <th>order_uid</th>
+                    <th>track_number</th>
+                    <!--<th>delivery</th>
+                    <th>payment</th>
+                    <th>items</th>-->
+                    <th>locale</th>
+                    <th>internal_signature</th>
+                    <th>customer_id</th>
+                    <th>delivery_service</th>
+                    <th>shardkey</th>
+                    <th>sm_id</th>
+                    <th>date_created</th>
+                    <th>oof_shard</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h2>Доставка:</h2>
+        <table id="deliveryTable">
+            <thead>
+                <tr>
+                    <th>name</th>
+                    <th>phone</th>
+                    <th>zip</th>
+                    <th>city</th>
+                    <th>address</th>
+                    <th>region</th>
+                    <th>email</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h2>Оплата:</h2>
+        <table id="paymentTable">
+            <thead>
+                <tr>
+                    <th>transaction</th>
+                    <th>request_id</th>
+                    <th>currency</th>
+                    <th>provider</th>
+                    <th>amount</th>
+                    <th>payment_dt</th>
+                    <th>bank</th>
+                    <th>delivery_cost</th>
+                    <th>goods_total</th>
+                    <th>custom_fee</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h2>Товары:</h2>
+        <table id="itemsTable">
+            <thead>
+                <tr>
+                    <th>chrt_id</th>
+                    <th>track_number</th>
+                    <th>price</th>
+                    <th>rid</th>
+                    <th>name</th>
+                    <th>sale</th>
+                    <th>size</th>
+                    <th>total_price</th>
+                    <th>nm_id</th>
+                    <th>brand</th>
+                    <th>status</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</body>
+
+</html>
