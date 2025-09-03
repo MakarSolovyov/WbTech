@@ -15,6 +15,7 @@ import (
 )
 
 func main() {
+
 	log.Println("Сервис запущен.")
 
 	sigchan := make(chan os.Signal, 1)
