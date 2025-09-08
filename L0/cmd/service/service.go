@@ -21,7 +21,8 @@ func main() {
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-	var brokers []string = []string{"localhost:9092"}
+	//var brokers []string = []string{"localhost:9092"}
+	brokers := []string{os.Getenv("KAFKA_BROKERS")} // "kafka:9092"
 
 	consumer, err := kafka.CreateConsumer(brokers)
 	if err != nil {

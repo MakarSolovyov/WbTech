@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -65,7 +66,14 @@ type Item struct {
 
 func ConnectDatabase() (*sql.DB, error) {
 
-	dbinfo := "host=localhost port=5432 user=goAdmin dbname=dbgo password=password sslmode=disable"
+	// dbinfo := "host=localhost port=5432 user=goAdmin dbname=dbgo password=password sslmode=disable"
+
+	dbinfo := "host=" + os.Getenv("POSTGRES_HOST") +
+		" user=" + os.Getenv("POSTGRES_USER") +
+		" password=" + os.Getenv("POSTGRES_PASSWORD") +
+		" dbname=" + os.Getenv("POSTGRES_DB") +
+		" port=" + os.Getenv("POSTGRES_PORT") +
+		" sslmode=disable"
 	db, err := sql.Open("postgres", dbinfo)
 	if err != nil {
 		log.Printf("Ошибка подключения к базе данных: %v", err)
