@@ -2,7 +2,7 @@ function generateOrders() {
 
     var genOutput = document.getElementById('generateOrderMsg');
 
-    fetch(`/generate`, {
+    fetch(`./generate`, {
         method: "POST"
     })
         .then(response => response.json())
@@ -18,6 +18,7 @@ function generateOrders() {
         })
         .catch(error => {
             console.error('Ошибка:', error);
+            genOutput.value = 'Обнаружена ошибка, подробности в консоли.';
         });
 }
 
@@ -32,7 +33,7 @@ function getOrder() {
 
     var orderUid = String(orderIdInput);
 
-    fetch(`/orders/${orderUid}`, {
+    fetch(`./orders/${orderUid}`, {
         method: "GET"
     })
         .then(response => response.json())

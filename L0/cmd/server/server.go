@@ -55,7 +55,7 @@ func main() {
 
 	staticDir := getFrontendDir()
 
-	router.StaticFS("/static", http.Dir(staticDir))
+	router.Static("/static", staticDir)
 
 	router.NoRoute(getMainPage)
 	router.GET("/orders", getMainPage)
@@ -82,10 +82,6 @@ func redirectOnMainPage(ctx *gin.Context) {
 }
 
 func getFrontendDir() string {
-	dir, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-	frontendDir := filepath.Join(dir, "../../frontend")
-	return frontendDir
+
+	return "/app/frontend"
 }

@@ -15,7 +15,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql # путь от L0
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
       interval: 5s
@@ -24,7 +24,7 @@ services:
     networks:
       - app-network
 
-  # Zookeeper для Kafka
+  # Zookeeper для Kafka от Bitnami
   zookeeper:
     image: bitnami/zookeeper:latest
     environment:
@@ -52,10 +52,63 @@ services:
       - "9093:9093"
     depends_on:
       - zookeeper
+    healthcheck:
+      test: [ "CMD", "kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
     networks:
       - app-network
 
-# Сети
+  # Backend сервер (из cmd/server/)
+  server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_BROKERS: kafka:9092
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PORT: 5432
+    volumes:
+      - ./frontend:/app/frontend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Worker сервис (из cmd/service/)
+  service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.service
+    environment:
+      KAFKA_BROKERS: kafka:9092
+      KAFKA_GROUP_ID: message-processor
+      KAFKA_TOPIC: messages
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PORT: 5432
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - app-network
+  # Сети
 networks:
   app-network:
     driver: bridge
