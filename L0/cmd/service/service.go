@@ -3,6 +3,7 @@ package main
 import (
 	"l0/internal/model"
 	kafka "l0/internal/pkg"
+	validation "l0/internal/validator"
 	"log"
 	"math/rand"
 	"os"
@@ -89,12 +90,18 @@ func generateOrdersOperation(data string) (interface{}, error) {
 				log.Printf("Ошибка генерации: %v\n", err)
 				return nil, err
 			}
+
 			items = append(items, item)
 		}
 
 		order.Delivery = delivery
 		order.Payment = payment
 		order.Items = items
+
+		if err = validation.Val.Struct(&order); err != nil {
+			log.Printf("Заказ (uuid: %s) не прошел валидацию: %s", order.Order_uid, err)
+			return nil, err
+		}
 
 		// TODO: Нужно сделать запись нескольких заказов одним запросом
 		err = model.AddToDatabase(order)

@@ -50,7 +50,7 @@ func DoRequest[T any](producer sarama.SyncProducer, worker sarama.Consumer, obje
 		return err.Error()
 	}
 
-	timer := time.After(10 * time.Second)
+	timer := time.After(5 * time.Second)
 
 	var response string = ""
 	doneCh := make(chan struct{})

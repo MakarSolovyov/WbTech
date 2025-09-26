@@ -27,6 +27,8 @@ func (ic *Controller) GenerateOrders(c *gin.Context) {
 			"error":   true,
 			"message": msg,
 		})
+
+		return
 	}
 
 	c.JSON(200, gin.H{

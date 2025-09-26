@@ -14,54 +14,54 @@ import (
 )
 
 type Order struct {
-	Order_uid          string    `json:"order_uid" fake:"{uuid}"`
-	Track_number       string    `json:"track_number"`
-	Entry              string    `json:"entry"`
+	Order_uid          string    `json:"order_uid" fake:"{uuid}" validate:"uuid"`
+	Track_number       string    `json:"track_number" validate:"required,max=100"`
+	Entry              string    `json:"entry" validate:"required,max=100"`
 	Delivery           Delivery  `json:"delivery" fake:"skip"`
 	Payment            Payment   `json:"payment" fake:"skip"`
 	Items              []Item    `json:"items" fake:"skip"`
-	Locale             string    `json:"locale" fake:"{languageabbreviation}"`
+	Locale             string    `json:"locale" fake:"{languageabbreviation}" validate:"required,max=20"`
 	Internal_signature string    `json:"internal_signature" fake:"skip"`
-	Customer_id        string    `json:"customer_id" fake:"{uuid}"`
-	Delivery_service   string    `json:"delivery_service" fake:"{company}"`
+	Customer_id        string    `json:"customer_id" fake:"{uuid}" validate:"uuid"`
+	Delivery_service   string    `json:"delivery_service" fake:"{company}" validate:"max=100"`
 	Shardkey           string    `json:"shardkey"`
-	Sm_id              int       `json:"sm_id" fake:"{number:1,100}"`
+	Sm_id              int       `json:"sm_id" fake:"{number:1,100}" validate:"numeric,max=100"`
 	Date_created       time.Time `json:"date_created"`
 	Oof_shard          string    `json:"oof_shard"`
 }
 type Delivery struct {
-	Name    string `json:"name" fake:"{name}"`
-	Phone   string `json:"phone" fake:"{phone}"`
-	Zip     string `json:"zip"`
-	City    string `json:"city" fake:"{city}"`
-	Address string `json:"address" fake:"{address}"`
-	Region  string `json:"region" fake:"{state}"`
-	Email   string `json:"email" fake:"{email}"`
+	Name    string `json:"name" fake:"{firstname}" validate:"alpha,max=100"`
+	Phone   string `json:"phone" fake:"{phone}" validate:"max=100"`
+	Zip     string `json:"zip" fake:"{zip}" validate:"max=100"`
+	City    string `json:"city" fake:"{city}" validate:"max=100"`
+	Address string `json:"address" fake:"{address}" validate:"required,max=1000"`
+	Region  string `json:"region" fake:"{state}" validate:"max=100"`
+	Email   string `json:"email" fake:"{email}" validate:"required,email,max=100"`
 }
 type Payment struct {
-	Transaction   string  `json:"transaction" fake:"{uuid}"`
-	Request_id    string  `json:"request_id" fake:"{uuid}"`
-	Currency      string  `json:"currency" fake:"{currencylong}"`
-	Provider      string  `json:"provider" fake:"{company}"`
-	Amount        float64 `json:"amount" fake:"{price:1,1000000}"`
-	Payment_dt    int     `json:"payment_dt" fake:"{number:100,100000}"`
-	Bank          string  `json:"bank" fake:"{bankname}"`
-	Delivery_cost float64 `json:"delivery_cost" fake:"{price:1,1000000}"`
-	Goods_total   float64 `json:"goods_total" fake:"{price:1,1000000}"`
-	Custom_fee    float64 `json:"custom_fee" fake:"{price:1,1000000}"`
+	Transaction   string  `json:"transaction" fake:"{uuid}" validate:"uuid"`
+	Request_id    string  `json:"request_id" fake:"{uuid}" validate:"uuid"`
+	Currency      string  `json:"currency" fake:"{currencylong}" validate:"required,max=100"`
+	Provider      string  `json:"provider" fake:"{company}" validate:"required,max=100"`
+	Amount        float64 `json:"amount" fake:"{price:1,1000000}" validate:"required"`
+	Payment_dt    int     `json:"payment_dt" fake:"{number:100,100000}" validate:"required,numeric"`
+	Bank          string  `json:"bank" fake:"{bankname}" validate:"required,max=100"`
+	Delivery_cost float64 `json:"delivery_cost" fake:"{price:1,1000000}" validate:"required"`
+	Goods_total   float64 `json:"goods_total" fake:"{price:1,1000000}" validate:"required"`
+	Custom_fee    float64 `json:"custom_fee" fake:"{price:1,1000000}" validate:"required"`
 }
 type Item struct {
-	Chrt_id      int     `json:"chrt_id" fake:"{number:1,10000000}"`
-	Track_number string  `json:"track_number"`
-	Price        float64 `json:"price" fake:"{price:1,1000}"`
-	Rid          string  `json:"rid" fake:"{uuid}"`
-	Name         string  `json:"name" fake:"{productname}"`
-	Sale         int     `json:"sale" fake:"{number:0,100}"`
-	Size         string  `json:"size"`
-	Total_price  float64 `json:"total_price" fake:"{price:1,1000000}"`
-	Nm_id        int     `json:"nm_id" fake:"{number:1,10000}"`
-	Brand        string  `json:"brand" fake:"{company}"`
-	Status       int     `json:"status" fake:"{number:0,10}"`
+	Chrt_id      int     `json:"chrt_id" fake:"{number:1,10000000}" validate:"required"`
+	Track_number string  `json:"track_number" validate:"required,max=100"`
+	Price        float64 `json:"price" fake:"{price:1,1000}" validate:"required"`
+	Rid          string  `json:"rid" fake:"{uuid}" validate:"uuid"`
+	Name         string  `json:"name" fake:"{productname}" validate:"required,max=100"`
+	Sale         int     `json:"sale" fake:"{number:0,100}" validate:"required"`
+	Size         string  `json:"size" validate:"required"`
+	Total_price  float64 `json:"total_price" fake:"{price:1,1000000}" validate:"required"`
+	Nm_id        int     `json:"nm_id" fake:"{number:1,10000}" validate:"required"`
+	Brand        string  `json:"brand" fake:"{company}" validate:"required,max=100"`
+	Status       int     `json:"status" fake:"{number:0,10}" validate:"required"`
 }
 
 func ConnectDatabase() (*sql.DB, error) {

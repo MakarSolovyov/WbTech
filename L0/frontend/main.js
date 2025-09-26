@@ -18,7 +18,10 @@ function generateOrders() {
         })
         .catch(error => {
             console.error('Ошибка:', error);
-            genOutput.value = 'Обнаружена ошибка, подробности в консоли.';
+
+            var errorMessage = error?.message || error?.toString() || 'Неизвестная ошибка';
+
+            genOutput.value = `Обнаружена ошибка: ${errorMessage}`;
         });
 }
 

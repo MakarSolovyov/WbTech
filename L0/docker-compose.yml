@@ -58,6 +58,26 @@ services:
       timeout: 5s
       retries: 10
       start_period: 40s
+    command: |
+      sh -c "
+      # Запускаем стандартный скрипт
+      /opt/bitnami/scripts/kafka/run.sh &
+      PID=$!
+
+      # Ждем готовности Kafka
+      until kafka-topics.sh --bootstrap-server localhost:9092 --list > /dev/null 2>&1; do
+          sleep 2
+      done
+
+      # Создаем топики
+      kafka-topics.sh --bootstrap-server localhost:9092 --create --topic post_order --partitions 1 --replication-factor 1 --if-not-exists
+      kafka-topics.sh --bootstrap-server localhost:9092 --create --topic post_order_response --partitions 1 --replication-factor 1 --if-not-exists
+      kafka-topics.sh --bootstrap-server localhost:9092 --create --topic get_order_by_id --partitions 1 --replication-factor 1 --if-not-exists
+      kafka-topics.sh --bootstrap-server localhost:9092 --create --topic get_order_by_id_response --partitions 1 --replication-factor 1 --if-not-exists
+
+      echo 'Топики созданы, ожидаем завершения Kafka...'
+      wait $PID
+      "
     networks:
       - app-network
 
